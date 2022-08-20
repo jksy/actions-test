@@ -1,0 +1,12 @@
+# name: Self hosted runner
+# on: [push]
+#
+# jobs:
+#   spec-api:
+#     runs-on: self-hosted
+#     container:
+#       image: ruby:2.7.6
+#       # options: --mount type=bind,source=/test-mnt,target=/test-mnt
+#       options: '-v "/test-mnt":"/test-mnt"'
+#       # volumes: # don't work on GitHub Actions
+#       #   - /test-mnt:/test-mnt
