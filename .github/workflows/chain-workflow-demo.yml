@@ -1,0 +1,96 @@
+name: Job chaining demo
+on:
+  workflow_dispatch:
+    inputs:
+      test_success:
+        default: true
+        type: boolean
+      build_ios_success:
+        default: true
+        type: boolean
+      build_android_success:
+        default: true
+        type: boolean
+      build_windows_success:
+        default: true
+        type: boolean
+      packaging_success:
+        default: true
+        type: boolean
+      upload_success:
+        default: true
+        type: boolean
+      notify_slack:
+        default: true
+        type: boolean
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  spec:
+    runs-on: ubuntu-latest
+    needs: [lint]
+    steps:
+      - run: echo "TEST"
+
+  test_ios:
+    runs-on: ubuntu-latest
+    needs: [spec]
+    steps:
+      - run: echo "TEST"
+
+  build_ios:
+    needs: [test_ios]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  test_android:
+    runs-on: ubuntu-latest
+    needs: [spec]
+    steps:
+      - run: echo "TEST"
+
+  build_android:
+    needs: [test_android]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  test_windows:
+    needs: [spec]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  build_windows:
+    runs-on: ubuntu-latest
+    needs: [test_windows]
+    steps:
+      - run: echo "TEST"
+
+  packaging:
+    needs: [build_ios, build_android, build_windows]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  upload:
+    needs: [packaging]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  upload:
+    needs: [packaging]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  notify_slack:
+    needs: [upload]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
