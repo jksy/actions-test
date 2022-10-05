@@ -1,0 +1,38 @@
+name: Input demo
+on:
+  workflow_call:
+    inputs:
+      test_success:
+        default: true
+        type: boolean
+      build_ios_success:
+        default: true
+        type: boolean
+      build_android_success:
+        default: true
+        type: boolean
+      build_windows_success:
+        default: true
+        type: boolean
+      packaging_success:
+        default: true
+        type: boolean
+      upload_success:
+        default: true
+        type: boolean
+      notify_slack:
+        default: true
+        type: boolean
+
+jobs:
+  re-run-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: execute something
+        run: echo ${{ inputs }}
+
+
+
+
+
+

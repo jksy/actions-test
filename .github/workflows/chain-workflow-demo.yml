@@ -1,0 +1,46 @@
+name: GitHub Actions workflow chaining demo
+on: [push]
+jobs:
+  input1:
+    uses: ./.github/workflows/input.yml
+  test:
+    needs: [input1]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  build_ios:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  build_android:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  build_windows:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  packaging:
+    needs: [build_ios, build_android, build_windows]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  upload:
+    needs: [packaging]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  notify_slack:
+    needs: [upload]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
