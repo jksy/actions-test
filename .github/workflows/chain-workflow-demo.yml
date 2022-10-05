@@ -1,14 +1,27 @@
 name: Job chaining demo
+
 on:
   workflow_dispatch:
     inputs:
-      test_success:
+      lint_success:
+        default: true
+        type: boolean
+      spec_success:
+        default: true
+        type: boolean
+      test_ios_success:
         default: true
         type: boolean
       build_ios_success:
         default: true
         type: boolean
+      test_android_success:
+        default: true
+        type: boolean
       build_android_success:
+        default: true
+        type: boolean
+      test_windows_success:
         default: true
         type: boolean
       build_windows_success:
@@ -23,74 +36,92 @@ on:
       notify_slack:
         default: true
         type: boolean
+
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
+      - if: ${{ input.lint_success != 'true' }}
+        run: exit 1
 
   spec:
     runs-on: ubuntu-latest
     needs: [lint]
     steps:
       - run: echo "TEST"
+      - if: ${{ input.spec_success != 'true' }}
+        run: exit 1
 
   test_ios:
     runs-on: ubuntu-latest
     needs: [spec]
     steps:
       - run: echo "TEST"
+      - if: ${{ input.test_ios_success != 'true' }}
+        run: exit 1
 
   build_ios:
     needs: [test_ios]
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
+      - if: ${{ input.build_ios_success != 'true' }}
+        run: exit 1
 
   test_android:
     runs-on: ubuntu-latest
     needs: [spec]
     steps:
       - run: echo "TEST"
+      - if: ${{ input.test_android_success != 'true' }}
+        run: exit 1
 
   build_android:
     needs: [test_android]
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
+      - if: ${{ input.build_android_success != 'true' }}
+        run: exit 1
 
   test_windows:
     needs: [spec]
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
+      - if: ${{ input.test_windows_success != 'true' }}
+        run: exit 1
 
   build_windows:
     runs-on: ubuntu-latest
     needs: [test_windows]
     steps:
       - run: echo "TEST"
+      - if: ${{ input.build_windows_success != 'true' }}
+        run: exit 1
 
   packaging:
     needs: [build_ios, build_android, build_windows]
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
+      - if: ${{ input.packaging_success != 'true' }}
+        run: exit 1
 
   upload:
     needs: [packaging]
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
-
-  upload:
-    needs: [packaging]
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "TEST"
+      - if: ${{ input.upload_success != 'true' }}
+        run: exit 1
 
   notify_slack:
     needs: [upload]
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
+      - if: ${{ input.notify_slack_success != 'true' }}
+        run: exit 1
+
