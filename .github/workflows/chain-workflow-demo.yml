@@ -1,40 +1,29 @@
-name: Job chaining demo
-
 on:
   workflow_dispatch:
     inputs:
-      lint_success:
-        default: true
+      spec_failure:
+        default: false
         type: boolean
-      spec_success:
-        default: true
+      test_android_failure:
+        default: false
         type: boolean
-      test_ios_success:
-        default: true
+      build_android_failure:
+        default: false
         type: boolean
-      build_ios_success:
-        default: true
+      test_windows_failure:
+        default: false
         type: boolean
-      test_android_success:
-        default: true
+      build_windows_failure:
+        default: false
         type: boolean
-      build_android_success:
-        default: true
+      packaging_failure:
+        default: false
         type: boolean
-      test_windows_success:
-        default: true
-        type: boolean
-      build_windows_success:
-        default: true
-        type: boolean
-      packaging_success:
-        default: true
-        type: boolean
-      upload_success:
-        default: true
+      upload_failure:
+        default: false
         type: boolean
       notify_slack:
-        default: true
+        default: false
         type: boolean
 
 jobs:
@@ -42,15 +31,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
-      - if: ${{ input.lint_success != 'true' }}
-        run: exit 1
 
   spec:
     runs-on: ubuntu-latest
     needs: [lint]
     steps:
       - run: echo "TEST"
-      - if: ${{ input.spec_success != 'true' }}
+      - if: ${{ fromJson(inputs.spec_failure) }}
         run: exit 1
 
   test_ios:
@@ -58,23 +45,19 @@ jobs:
     needs: [spec]
     steps:
       - run: echo "TEST"
-      - if: ${{ input.test_ios_success != 'true' }}
-        run: exit 1
 
   build_ios:
     needs: [test_ios]
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
-      - if: ${{ input.build_ios_success != 'true' }}
-        run: exit 1
 
   test_android:
     runs-on: ubuntu-latest
     needs: [spec]
     steps:
       - run: echo "TEST"
-      - if: ${{ input.test_android_success != 'true' }}
+      - if: ${{ fromJson(inputs.test_android_failure) }}
         run: exit 1
 
   build_android:
@@ -82,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
-      - if: ${{ input.build_android_success != 'true' }}
+      - if: ${{ fromJson(inputs.build_android_failure) }}
         run: exit 1
 
   test_windows:
@@ -90,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
-      - if: ${{ input.test_windows_success != 'true' }}
+      - if: ${{ fromJson(inputs.test_windows_failure) }}
         run: exit 1
 
   build_windows:
@@ -98,7 +81,7 @@ jobs:
     needs: [test_windows]
     steps:
       - run: echo "TEST"
-      - if: ${{ input.build_windows_success != 'true' }}
+      - if: ${{ fromJson(inputs.build_windows_failure) }}
         run: exit 1
 
   packaging:
@@ -106,7 +89,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
-      - if: ${{ input.packaging_success != 'true' }}
+      - if: ${{ fromJson(inputs.packaging_failure) }}
         run: exit 1
 
   upload:
@@ -114,7 +97,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
-      - if: ${{ input.upload_success != 'true' }}
+      - if: ${{ fromJson(inputs.upload_failure) }}
         run: exit 1
 
   notify_slack:
@@ -122,6 +105,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "TEST"
-      - if: ${{ input.notify_slack_success != 'true' }}
+      - if: ${{ fromJson(inputs.notify_slack_failure) }}
         run: exit 1
 

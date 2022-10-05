@@ -1,0 +1,81 @@
+name: Random failure
+
+on:
+  push:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  spec:
+    runs-on: ubuntu-latest
+    needs: [lint]
+    steps:
+      - run: echo "TEST"
+      - run: if [ $(($RANDOM % 2)) -eq 1 ];  then  exit 1; else exit 0; fi
+
+  test_ios:
+    runs-on: ubuntu-latest
+    needs: [spec]
+    steps:
+      - run: echo "TEST"
+      - run: if [ $(($RANDOM % 2)) -eq 1 ];  then  exit 1; else exit 0; fi
+
+  build_ios:
+    needs: [test_ios]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+      - run: if [ $(($RANDOM % 2)) -eq 1 ];  then  exit 1; else exit 0; fi
+
+  test_android:
+    runs-on: ubuntu-latest
+    needs: [spec]
+    steps:
+      - run: echo "TEST"
+      - run: if [ $(($RANDOM % 2)) -eq 1 ];  then  exit 1; else exit 0; fi
+
+  build_android:
+    needs: [test_android]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+      - run: if [ $(($RANDOM % 2)) -eq 1 ];  then  exit 1; else exit 0; fi
+
+  test_windows:
+    needs: [spec]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+      - run: if [ $(($RANDOM % 2)) -eq 1 ];  then  exit 1; else exit 0; fi
+
+  build_windows:
+    runs-on: ubuntu-latest
+    needs: [test_windows]
+    steps:
+      - run: echo "TEST"
+      - run: if [ $(($RANDOM % 2)) -eq 1 ];  then  exit 1; else exit 0; fi
+
+  packaging:
+    needs: [build_ios, build_android, build_windows]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+      - run: if [ $(($RANDOM % 2)) -eq 1 ];  then  exit 1; else exit 0; fi
+
+  upload:
+    needs: [packaging]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+      - run: if [ $(($RANDOM % 2)) -eq 1 ];  then  exit 1; else exit 0; fi
+
+  notify_slack:
+    needs: [upload]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+      - run: if [ $(($RANDOM % 2)) -eq 1 ];  then  exit 1; else exit 0; fi
+
