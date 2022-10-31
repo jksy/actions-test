@@ -1,0 +1,116 @@
+#
+# 依存関係のあるJobの書き方（のサンプル）
+#
+# 全体をみると、こんなかんじになります
+#
+# 注意事項
+# - 各々のJobは独立した処理を記述し、以降のJobで必要な成果物はArtifactやS3等へアップロードしてください
+# - 成果物をアップロードしておくことにより、Jobが失敗し再開したときも以前の成果物を使いworkflowを継続することができるようになります
+#
+on:
+  push:
+
+jobs:
+  # Server周りのlintとspecを実行
+  lint-api:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  spec-api:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+      # - name: Archive API spec results
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: code-coverage-report
+      #     path: output/test/....
+
+
+  lint-admin:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  spec-admin:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+      # - name: Archive Admin spec results
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: code-coverage-report
+      #     path: output/test/....
+
+  # Server周りのlintとspecが終わったらビルドする
+  build-server:
+    runs-on: ubuntu-latest
+    needs: [lint-api, spec-api, lint-admin, spec-admin]
+    steps:
+      - run: echo "TEST"
+      # - name: Upload server image....
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: code-coverage-report
+      #     path: output/test/....
+
+  # Client周りのlintとspecを実行
+  lint-client:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  test-client:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  # 各々の環境のClientをビルドする
+  build-client-for-android:
+    runs-on: ubuntu-latest
+    needs: [lint-client, test-client]
+    steps:
+      - run: echo "TEST"
+      # - name: Upload Android client....
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: code-coverage-report
+      #     path: output/build/....
+
+  build-client-for-ios:
+    runs-on: ubuntu-latest
+    needs: [lint-client, test-client]
+    steps:
+      - run: echo "TEST"
+      # - name: Upload iOS client....
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: code-coverage-report
+      #     path: output/build/....
+
+  build-client-for-windows:
+    runs-on: ubuntu-latest
+    needs: [lint-client, test-client]
+    steps:
+      - run: echo "TEST"
+      # - name: Upload windows client....
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: code-coverage-report
+      #     path: output/build/....
+
+  # アップロード後のサーバーイメージ、クライアントのバイナリを使ってdeployする
+  deploy-server-and-client:
+    needs: [build-server, build-client-for-android, build-client-for-ios, build-client-for-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
+  # 完了通知を投げる
+  notify_slack:
+    needs: [deploy-server-and-client]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TEST"
+
