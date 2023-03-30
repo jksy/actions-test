@@ -1,0 +1,22 @@
+on:
+  push:
+
+jobs:
+  mult-argument-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # - uses: ./.github/actions/multi-input/
+      #   with:
+      #     path: # The workflow is not valid. .github/workflows/multi-argument-test.yml (Line: 11, Col: 13): A sequence was not expected
+      #       - /a/
+      #       - /b
+      #       - /c
+
+      - uses: ./.github/actions/multi-input/
+        with:
+          path: |
+            /a/
+            /b
+            /c
