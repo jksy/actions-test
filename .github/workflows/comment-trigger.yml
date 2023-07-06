@@ -14,7 +14,7 @@ env:
 
 jobs:
   comment-trigger:
-    runs-on: [self-hosted, linux, mq-server]
+    runs-on: ubuntu-latest
     if: ${{ ( contains(github.event.comment.html_url, '/pull/') && contains(github.event.comment.body, '.github') ) }}
     steps:
       - name: Triage comment
