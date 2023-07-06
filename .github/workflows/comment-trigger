@@ -1,0 +1,24 @@
+name: comment-test
+
+on:
+  issue_comment:  # https://docs.github.com/en/webhooks-and-events/events/issue-event-types#commented
+    types: [created, edited]
+
+permissions:
+  contents: write                                                                                                                                                
+  pull-requests: write
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PR_NUMBER: ${{ github.event.issue.pull_request.id }}
+
+jobs:
+  comment-trigger:
+    runs-on: [self-hosted, linux, mq-server]
+    if: ${{ ( contains(github.event.comment.html_url, '/pull/') && contains(github.event.comment.body, '.github') ) }}
+    steps:
+      - name: Triage comment
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        run: |
+          echo '${{ github.event }}'
