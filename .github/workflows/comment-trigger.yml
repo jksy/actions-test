@@ -21,4 +21,4 @@ jobs:
         env:
           COMMENT_BODY: ${{ github.event.comment.body }}
         run: |
-          echo '${{ github.event }}'
+          echo '${{ toJSON(github.event) }}'
