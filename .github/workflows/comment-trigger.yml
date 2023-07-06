@@ -22,4 +22,4 @@ jobs:
           COMMENT_BODY: ${{ github.event.comment.body }}
         run: |
           echo '${{ toJSON(github.event) }}'
-          echo '${{ github.event.issue.id }}'
+          echo '${{ github.event.issue.number }}'
